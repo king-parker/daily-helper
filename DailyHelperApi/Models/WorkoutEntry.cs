@@ -8,6 +8,6 @@ namespace DailyHelperApi.Models
         public int Sets { get; set; }
         public int Reps { get; set; }
         public DateTime Date { get; set; }
-        public string Notes { get; set; } = string.Empty;
+        public string? Notes { get; set; }
     }
 }
