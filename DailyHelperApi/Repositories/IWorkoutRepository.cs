@@ -4,11 +4,11 @@ namespace DailyHelperApi.Repositories
 {
     public interface IWorkoutRepository
     {
-        IEnumerable<WorkoutEntry> GetAll();
-        WorkoutEntry? GetById(int id);
-        IEnumerable<WorkoutEntry> GetByExercise(string exercise);
-        WorkoutEntry? Add(WorkoutEntry entry);
-        WorkoutEntry? Update(int id, WorkoutEntry newEntry);
-        bool Delete(int id);
+        Task<IEnumerable<WorkoutEntry>> GetAllAsync();
+        Task<WorkoutEntry?> GetByIdAsync(int id);
+        Task<IEnumerable<WorkoutEntry>> GetByExerciseAsync(string exercise);
+        Task<WorkoutEntry?> AddAsync(WorkoutEntry entry);
+        Task<WorkoutEntry?> UpdateAsync(int id, WorkoutEntry newEntry);
+        Task<bool> DeleteAsync(int id);
     }
 }

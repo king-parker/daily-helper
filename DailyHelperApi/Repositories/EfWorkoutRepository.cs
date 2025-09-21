@@ -1,5 +1,6 @@
 ﻿using DailyHelperApi.Data;
 using DailyHelperApi.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace DailyHelperApi.Repositories
 {
@@ -12,23 +13,25 @@ namespace DailyHelperApi.Repositories
             _context = context;
         }
 
-        public IEnumerable<WorkoutEntry> GetAll() => _context.Workouts.ToList();
+        public async Task<IEnumerable<WorkoutEntry>> GetAllAsync() =>
+            await _context.Workouts.ToListAsync();
 
-        public WorkoutEntry? GetById(int id) => _context.Workouts.Find(id);
+        public async Task<WorkoutEntry?> GetByIdAsync(int id) =>
+            await _context.Workouts.FindAsync(id);
 
-        public IEnumerable<WorkoutEntry> GetByExercise(string exercise) =>
-            _context.Workouts
+        public async Task<IEnumerable<WorkoutEntry>> GetByExerciseAsync(string exercise) =>
+            await _context.Workouts
                 .Where(w => w.Exercise.ToLower() == exercise.ToLower())
-                .ToList();
+                .ToListAsync();
 
-        public WorkoutEntry? Add(WorkoutEntry entry)
+        public async Task<WorkoutEntry?> AddAsync(WorkoutEntry entry)
         {
             _context.Workouts.Add(entry);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return entry;
         }
 
-        public WorkoutEntry? Update(int id, WorkoutEntry newEntry)
+        public async Task<WorkoutEntry?> UpdateAsync(int id, WorkoutEntry newEntry)
         {
             var existingEntry = _context.Workouts.Find(id);
             if (existingEntry == null)
@@ -43,11 +46,11 @@ namespace DailyHelperApi.Repositories
             existingEntry.Date = newEntry.Date;
             existingEntry.Notes = newEntry.Notes;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return existingEntry;
         }
 
-        public bool Delete(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
             var entry = _context.Workouts.Find(id);
             if (entry == null)
@@ -56,7 +59,7 @@ namespace DailyHelperApi.Repositories
             }
 
             _context.Workouts.Remove(entry);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             return true;
         }
     }

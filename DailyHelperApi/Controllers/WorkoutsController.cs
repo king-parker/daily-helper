@@ -19,12 +19,12 @@ namespace DailyHelperApi.Controllers
         }
 
         [HttpGet]
-        public IEnumerable<WorkoutEntry> GetAll() => _repository.GetAll();
+        public async Task<IEnumerable<WorkoutEntry>> GetAllAsync() => await _repository.GetAllAsync();
 
         [HttpGet("{id}")]
-        public ActionResult<WorkoutEntry> GetById(int id)
+        public async Task<ActionResult<WorkoutEntry>> GetById(int id)
         {
-            var entry = _repository.GetById(id);
+            var entry = await _repository.GetByIdAsync(id);
             if (entry == null)
             {
                 return NotFound();
@@ -34,13 +34,13 @@ namespace DailyHelperApi.Controllers
         }
 
         [HttpGet("exercise/{exercise}")]
-        public IEnumerable<WorkoutEntry> GetByExercise(string exercise) =>
-            _repository.GetByExercise(exercise);
+        public async Task<IEnumerable<WorkoutEntry>> GetByExercise(string exercise) =>
+            await _repository.GetByExerciseAsync(exercise);
 
         [HttpPost]
-        public ActionResult<WorkoutEntry> Add(WorkoutEntry entry)
+        public async Task<ActionResult<WorkoutEntry>> Add(WorkoutEntry entry)
         {
-            var createdEntry = _repository.Add(entry);
+            var createdEntry = await _repository.AddAsync(entry);
             if (createdEntry == null)
             {
                 return BadRequest();
@@ -50,9 +50,9 @@ namespace DailyHelperApi.Controllers
         }
 
         [HttpPut("{id}")]
-        public ActionResult<WorkoutEntry> Update(int id, WorkoutEntry updatedEntry)
+        public async Task<ActionResult<WorkoutEntry>> Update(int id, WorkoutEntry updatedEntry)
         {
-            var entry = _repository.Update(id, updatedEntry);
+            var entry = await _repository.UpdateAsync(id, updatedEntry);
             if (entry == null)
             {
                 return NotFound();
@@ -62,9 +62,9 @@ namespace DailyHelperApi.Controllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
-            var success = _repository.Delete(id);
+            var success = await _repository.DeleteAsync(id);
             if (!success)
             {
                 return NotFound();
