@@ -1,4 +1,6 @@
-﻿using DailyHelperApi.Models;
+﻿using AutoMapper;
+using DailyHelperApi.Dtos.Workouts;
+using DailyHelperApi.Models;
 using DailyHelperApi.Repositories;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -11,64 +13,73 @@ namespace DailyHelperApi.Controllers
     {
         private readonly IWorkoutRepository _repository;
         private readonly ILogger<WorkoutsController> _logger;
+        private readonly IMapper _mapper;
 
-        public WorkoutsController(IWorkoutRepository repository, ILogger<WorkoutsController> logger)
+        public WorkoutsController(IWorkoutRepository repository, ILogger<WorkoutsController> logger, IMapper mapper)
         {
             _repository = repository;
             _logger = logger;
+            _mapper = mapper;
         }
 
         [HttpGet]
-        public async Task<IEnumerable<WorkoutEntry>> GetAllAsync() => await _repository.GetAllAsync();
+        public async Task<IEnumerable<WorkoutResponseDto>> GetAll()
+        {
+            var entries = await _repository.GetAllAsync();
+            return _mapper.Map<IEnumerable<WorkoutResponseDto>>(entries);
+        }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<WorkoutEntry>> GetById(int id)
+        public async Task<ActionResult<WorkoutResponseDto>> GetById(int id)
         {
             var entry = await _repository.GetByIdAsync(id);
-            if (entry == null)
-            {
-                return NotFound();
-            }
+            if (entry == null) { return NotFound(); }
 
-            return entry;
+            var response = _mapper.Map<WorkoutResponseDto>(entry);
+
+            return Ok(response);
         }
 
         [HttpGet("exercise/{exercise}")]
-        public async Task<IEnumerable<WorkoutEntry>> GetByExercise(string exercise) =>
-            await _repository.GetByExerciseAsync(exercise);
+        public async Task<IEnumerable<WorkoutResponseDto>> GetByExercise(string exercise)
+        {
+            var entries = await _repository.GetByExerciseAsync(exercise);
+            return _mapper.Map<IEnumerable<WorkoutResponseDto>>(entries);
+        }
 
         [HttpPost]
-        public async Task<ActionResult<WorkoutEntry>> Add(WorkoutEntry entry)
+        public async Task<ActionResult<WorkoutResponseDto>> Add(WorkoutCreateDto workout)
         {
+            var entry = _mapper.Map<WorkoutEntry>(workout);
             var createdEntry = await _repository.AddAsync(entry);
-            if (createdEntry == null)
-            {
-                return BadRequest();
-            }
+            if (createdEntry == null) {  return BadRequest(); }
 
-            return CreatedAtAction(nameof(GetById), new { id = createdEntry.Id }, createdEntry);
+            var workoutResponse = _mapper.Map<WorkoutResponseDto>(createdEntry);
+
+            return CreatedAtAction(nameof(GetById), new { id = createdEntry.Id }, workoutResponse);
         }
 
         [HttpPut("{id}")]
-        public async Task<ActionResult<WorkoutEntry>> Update(int id, WorkoutEntry updatedEntry)
+        public async Task<ActionResult<WorkoutResponseDto>> Update(int id, WorkoutUpdateDto updatedWorkout)
         {
-            var entry = await _repository.UpdateAsync(id, updatedEntry);
-            if (entry == null)
-            {
-                return NotFound();
-            }
+            // Check if the entry exists
+            var entry = await _repository.GetByIdAsync(id);
+            if (entry == null) { return NotFound(); }
 
-            return entry;
+            // Map updated fields
+            _mapper.Map(updatedWorkout, entry);
+            var updatedEntry = await _repository.UpdateAsync(id, entry);
+
+            // Return the updated entry
+            var response = _mapper.Map<WorkoutResponseDto>(updatedEntry);
+            return Ok(response);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
             var success = await _repository.DeleteAsync(id);
-            if (!success)
-            {
-                return NotFound();
-            }
+            if (!success) { return NotFound(); }
 
             return NoContent();
         }
