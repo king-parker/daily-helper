@@ -8,9 +8,9 @@ namespace DailyHelperApi.Mappings
     {
         public WorkoutMappingProfile()
         {
-            CreateMap<WorkoutCreateDto, WorkoutEntry>();
-            CreateMap<WorkoutUpdateDto, WorkoutEntry>();
-            CreateMap<WorkoutEntry, WorkoutResponseDto>();
+            CreateMap<WorkoutEntry, WorkoutResponseDto>().ReverseMap();
+            CreateMap<WorkoutCreateDto, WorkoutEntry>().ForMember(dest => dest.Id, opt => opt.Ignore());
+            CreateMap<WorkoutUpdateDto, WorkoutEntry>().ForMember(dest => dest.Id, opt => opt.Ignore());
         }
     }
 }

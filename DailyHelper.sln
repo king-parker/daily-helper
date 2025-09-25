@@ -1,9 +1,11 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.14.36511.14 d17.14
+VisualStudioVersion = 17.14.36511.14
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DailyHelperApi", "DailyHelperApi\DailyHelperApi.csproj", "{0BF9971C-1A79-4ADE-A5FF-B70EA64264D0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DailyHelperApi.Tests", "DailyHelperApi.Tests\DailyHelperApi.Tests.csproj", "{006ABA74-78D4-4148-99E9-55C0972E62C0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -15,6 +17,10 @@ Global
 		{0BF9971C-1A79-4ADE-A5FF-B70EA64264D0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0BF9971C-1A79-4ADE-A5FF-B70EA64264D0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0BF9971C-1A79-4ADE-A5FF-B70EA64264D0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{006ABA74-78D4-4148-99E9-55C0972E62C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{006ABA74-78D4-4148-99E9-55C0972E62C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{006ABA74-78D4-4148-99E9-55C0972E62C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{006ABA74-78D4-4148-99E9-55C0972E62C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
